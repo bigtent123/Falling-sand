@@ -1,0 +1,198 @@
+/* Retro look modeled on the classic falling sand game pages:
+ * black play field, small gray control panel pinned to the bottom-right
+ * corner of the canvas, tiny bitmap-ish fonts, colored element counters. */
+
+* { box-sizing: border-box; }
+
+body {
+  background: #121212;
+  color: #ddd;
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 12px;
+  margin: 0;
+  padding: 12px;
+}
+
+main { max-width: 980px; margin: 0 auto; }
+
+h1 {
+  font-size: 18px;
+  letter-spacing: 3px;
+  color: #e8c060;
+  margin: 4px 0 2px;
+}
+
+.sub { color: #999; margin: 0 0 10px; }
+
+#game-wrap {
+  position: relative;
+  width: 960px;
+  max-width: 100%;
+  border: 2px solid #444;
+  background: #000;
+  line-height: 0;
+}
+
+#game {
+  width: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+/* --- the classic bottom-right control panel ------------------------- */
+
+#panel {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  display: flex;
+  gap: 6px;
+  background: rgba(40, 40, 40, 0.92);
+  border: 1px solid #666;
+  padding: 6px;
+  line-height: 1.35;
+  font-size: 10px;
+  max-width: 96%;
+}
+
+#panel-left { display: flex; flex-direction: column; gap: 4px; }
+
+#streams { display: flex; gap: 3px; align-items: center; color: #aaa; }
+#streams select {
+  background: #222; color: #ddd; border: 1px solid #555;
+  font-size: 10px; max-width: 70px;
+}
+
+#classic-buttons {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 2px;
+}
+
+#classic-buttons button {
+  background: #333;
+  border: 1px outset #777;
+  color: #ccc;
+  font-size: 9px;
+  padding: 2px 1px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+#classic-buttons button:hover { background: #3d3d3d; }
+
+#classic-buttons button.sel,
+#lib-list button.sel {
+  border: 1px inset #fff;
+  background: #1a1a1a;
+  color: #fff;
+}
+
+#controls { display: flex; gap: 6px; align-items: center; color: #aaa; flex-wrap: wrap; }
+#controls select, #controls button {
+  background: #333; color: #ddd; border: 1px outset #777; font-size: 10px; cursor: pointer;
+}
+
+#counters {
+  min-width: 92px;
+  border-left: 1px solid #555;
+  padding-left: 6px;
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  color: #0f0;
+}
+#counters .cline { display: flex; justify-content: space-between; gap: 6px; }
+#counters .cname { overflow: hidden; text-overflow: ellipsis; max-width: 70px; }
+
+/* --- boxes below the game ------------------------------------------- */
+
+#below { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+
+.box {
+  background: #1c1c1c;
+  border: 1px solid #444;
+  padding: 10px;
+  flex: 1 1 380px;
+}
+
+.box h2 { font-size: 13px; color: #e8c060; letter-spacing: 2px; margin: 0 0 8px; }
+#element-count { color: #888; font-weight: normal; letter-spacing: 0; }
+
+.lib-controls { display: flex; gap: 6px; margin-bottom: 6px; }
+.lib-controls input, .lib-controls select {
+  background: #262626; color: #ddd; border: 1px solid #555; padding: 3px 6px; font-size: 11px;
+}
+#lib-search { flex: 1; }
+
+#lib-list {
+  max-height: 220px;
+  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  align-content: flex-start;
+}
+
+#lib-list button {
+  background: #2c2c2c;
+  border: 1px outset #666;
+  color: #ccc;
+  font-size: 10px;
+  padding: 2px 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+#lib-list button .swatch {
+  width: 8px; height: 8px; display: inline-block; border: 1px solid #000;
+}
+#lib-list button.ai-made { border-color: #a060e0; }
+
+#el-desc { color: #999; min-height: 28px; margin: 8px 0 0; }
+
+/* --- AI lab ----------------------------------------------------------- */
+
+.hint { color: #999; margin: 0 0 8px; }
+.ai-row { display: flex; gap: 6px; }
+#ai-prompt {
+  flex: 1; background: #262626; color: #fff; border: 1px solid #666; padding: 5px 8px; font-size: 12px;
+}
+#ai-generate {
+  background: #6a3aa8; color: #fff; border: 1px outset #9a6ad8;
+  padding: 5px 14px; font-size: 12px; cursor: pointer;
+}
+#ai-generate:disabled { opacity: 0.5; cursor: wait; }
+
+#ai-status { margin: 8px 0; color: #8fc860; white-space: pre-wrap; }
+#ai-status.err { color: #e07060; }
+#ai-status .warn { color: #c8a850; display: block; }
+
+#ai-created { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+#ai-created button {
+  background: #2a2138; border: 1px outset #7a5ab8; color: #d8c8f0;
+  font-size: 10px; padding: 2px 8px; cursor: pointer;
+}
+#ai-created button.sel { border-style: inset; color: #fff; }
+
+details { margin-top: 8px; color: #aaa; }
+details summary { cursor: pointer; color: #c8a850; }
+details pre {
+  font-size: 10px; color: #9a9; background: #141414;
+  padding: 8px; overflow-x: auto; white-space: pre-wrap;
+}
+details label { display: block; margin: 6px 0; }
+details input {
+  background: #262626; color: #ddd; border: 1px solid #555;
+  padding: 3px 6px; width: 100%; max-width: 320px; display: block; margin-top: 2px;
+}
+#ai-save {
+  background: #333; color: #ddd; border: 1px outset #777; padding: 3px 10px; cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  #panel { position: static; max-width: 100%; margin-top: 4px; }
+}
