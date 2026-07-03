@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Falling Sand Game — with AI particles</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main>
+  <h1>FALLING SAND GAME</h1>
+  <p class="sub">The classic — plus an AI particle lab and a 300-element library.
+    Draw with the mouse. Right-click erases.</p>
+
+  <div id="game-wrap">
+    <canvas id="game" width="960" height="640"></canvas>
+
+    <!-- classic control panel, bottom-right like the original -->
+    <div id="panel">
+      <div id="panel-left">
+        <div id="streams">
+          <label>Streams:</label>
+          <select class="stream" data-i="0"></select>
+          <select class="stream" data-i="1"></select>
+          <select class="stream" data-i="2"></select>
+          <select class="stream" data-i="3"></select>
+        </div>
+        <div id="classic-buttons"></div>
+        <div id="controls">
+          <label>Pen
+            <select id="pen-size">
+              <option>1</option><option>2</option><option selected>4</option>
+              <option>8</option><option>16</option><option>32</option>
+            </select>
+          </label>
+          <label>Speed
+            <select id="speed">
+              <option value="0.5">Slow</option>
+              <option value="1" selected>Normal</option>
+              <option value="2">Fast</option>
+              <option value="4">Turbo</option>
+            </select>
+          </label>
+          <button id="pause-btn" type="button">Pause</button>
+          <button id="clear-btn" type="button">Clear Screen</button>
+        </div>
+      </div>
+      <div id="counters"></div>
+    </div>
+  </div>
+
+  <div id="below">
+    <!-- full element library -->
+    <section class="box" id="library-box">
+      <h2>ELEMENT LIBRARY <span id="element-count"></span></h2>
+      <div class="lib-controls">
+        <input id="lib-search" type="search" placeholder="Search elements...">
+        <select id="lib-cat">
+          <option value="all">All</option>
+          <option value="2">Powders</option>
+          <option value="4">Liquids</option>
+          <option value="5">Gases</option>
+          <option value="1">Solid / Static</option>
+          <option value="3">Falling Solids</option>
+          <option value="6">Energy</option>
+          <option value="7">Creatures</option>
+          <option value="ai">AI-made</option>
+        </select>
+      </div>
+      <div id="lib-list"></div>
+      <p id="el-desc"></p>
+    </section>
+
+    <!-- AI particle lab -->
+    <section class="box" id="ai-box">
+      <h2>AI PARTICLE LAB</h2>
+      <p class="hint">Describe any particle — <em>cat</em>, <em>molten uranium</em>,
+        <em>sticky purple slime</em>, <em>explosive rainbow dust</em> — and it will be
+        generated to follow the guidelines and dropped into your palette.</p>
+      <div class="ai-row">
+        <input id="ai-prompt" type="text" maxlength="80" placeholder="e.g. cat">
+        <button id="ai-generate" type="button">Generate</button>
+      </div>
+      <div id="ai-status"></div>
+      <div id="ai-created"></div>
+      <details>
+        <summary>Particle guidelines (what the AI must follow)</summary>
+        <pre id="ai-guidelines"></pre>
+      </details>
+      <details>
+        <summary>AI settings (optional — works offline without a key)</summary>
+        <p class="hint">With an API key the prompt is sent to an OpenAI-compatible
+          model. Without one, the built-in offline synthesizer is used.</p>
+        <label>API endpoint <input id="ai-endpoint" type="text" placeholder="https://api.openai.com/v1"></label>
+        <label>API key <input id="ai-key" type="password" placeholder="sk-..."></label>
+        <label>Model <input id="ai-model" type="text" placeholder="gpt-4o-mini"></label>
+        <button id="ai-save" type="button">Save settings</button>
+      </details>
+    </section>
+  </div>
+</main>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

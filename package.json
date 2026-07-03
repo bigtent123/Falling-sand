@@ -1,0 +1,11 @@
+{
+  "name": "falling-sand-ai",
+  "version": "1.0.0",
+  "description": "The classic falling sand game with an AI particle lab and a 300-element library. No runtime dependencies.",
+  "type": "module",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "test": "node test/run-tests.mjs"
+  },
+  "license": "MIT"
+}
