@@ -249,6 +249,16 @@ export class Engine {
 
   moveEnergy(i, x, y, el) {
     if (el.spark) { this.moveSpark(i, x, y, el); return; }
+    let clings = false;
+    if (el.tags.has('hot')) {
+      // hot energy (fire) actively ignites its neighbors...
+      if (y > 0) clings = this.fireTouch(i - this.w) || clings;
+      if (y + 1 < this.h) clings = this.fireTouch(i + this.w) || clings;
+      if (x > 0) clings = this.fireTouch(i - 1) || clings;
+      if (x + 1 < this.w) clings = this.fireTouch(i + 1) || clings;
+    }
+    // ...and clings to flammable surfaces instead of floating away
+    if (clings && this.rng() < 0.9) return;
     // fire-like: flickers upward
     const r = this.rng();
     let dx = (this.rng() * 3 | 0) - 1, dy = r < 0.72 ? -1 : (r < 0.92 ? 0 : 1);
@@ -298,6 +308,17 @@ export class Engine {
       const j = this.idx(nx, ny);
       if (this.cells[j] === 0) this.swap(i, j);
     }
+  }
+
+  /* Fire touching cell j: try to ignite it. Returns true if it is fuel. */
+  fireTouch(j) {
+    const o = this.cells[j];
+    if (o === 0) return false;
+    if (this.entityMap[j]) { this.entities?.damage(this.entityMap[j] - 1, 2, 'fire'); return false; }
+    const oe = this.reg.elements[o];
+    if (oe.flamm <= 0 || oe.tags.has('fireproof')) return false;
+    if (this.burn[j] === 0 && this.rng() < oe.flamm) this.ignite(j);
+    return true;
   }
 
   isFluid(j) {
@@ -356,9 +377,12 @@ export class Engine {
     }
     // spread to flammable neighbors + shed flames and smoke
     const w = this.w;
-    const neigh = [i - w, i + w, i - 1, i + 1];
+    const neigh = [];
+    if (y > 0) neigh.push(i - w);
+    if (y < this.h - 1) neigh.push(i + w);
+    if (x > 0) neigh.push(i - 1);
+    if (x < w - 1) neigh.push(i + 1);
     for (const j of neigh) {
-      if (j < 0 || j >= this.cells.length) continue;
       const o = this.cells[j];
       if (o === 0) {
         if (this.rng() < 0.12 && j === i - w) this.setI(j, this.FIRE);
@@ -388,10 +412,13 @@ export class Engine {
 
   stepReactions(i, x, y, el) {
     const w = this.w;
-    const neigh = [i - w, i + w, i - 1, i + 1];
+    const neigh = [];
+    if (y > 0) neigh.push(i - w);
+    if (y < this.h - 1) neigh.push(i + w);
+    if (x > 0) neigh.push(i - 1);
+    if (x < w - 1) neigh.push(i + 1);
 
     for (const j of neigh) {
-      if (j < 0 || j >= this.cells.length) continue;
       const o = this.cells[j];
 
       // sinks eat neighbors

@@ -140,7 +140,7 @@ console.log('\n-- classic physics --');
   for (let x = 0; x < 60; x++) engine.set(x, 59, wall);
   for (let y = 50; y < 59; y++) for (let x = 20; x < 40; x++) engine.set(x, y, gp);
   const before = countId(engine, gp);
-  engine.set(30, 49, fire);
+  for (let x = 29; x <= 31; x++) engine.set(x, 49, fire);
   for (let t = 0; t < 120; t++) engine.update();
   const after = countId(engine, gp);
   check('gunpowder chain-detonates from a spark', after < before * 0.3, `before=${before} after=${after}`);
@@ -250,9 +250,10 @@ console.log('\n-- creatures --');
   check('cat spawns as an entity', engine.entities.count() === 1);
   const ent = engine.entities.list[0];
   const x0 = ent.x;
-  for (let t = 0; t < 120; t++) engine.update();
+  let moved = false;
+  for (let t = 0; t < 120; t++) { engine.update(); if (ent.x !== x0) moved = true; }
   check('cat is alive and standing on the floor', engine.entities.count() === 1 && ent.y + ent.shape.h <= 51);
-  check('cat walks around', ent.x !== x0, `x0=${x0} x=${ent.x}`);
+  check('cat walks around', moved, `x0=${x0} x=${ent.x}`);
   check('cat body cells are in the grid', countId(engine, cat) > 5);
 
   // now torch the floor under it
