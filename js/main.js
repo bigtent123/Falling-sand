@@ -324,3 +324,10 @@ function frame() {
 
 selectElement(selected);
 requestAnimationFrame(frame);
+
+// debug/testing hook
+window.__debug = () => {
+  let total = 0;
+  for (let id = 1; id < reg.count(); id++) total += engine.counts[id];
+  return { total, entities: engine.entities.count(), fps, elements: reg.count() };
+};

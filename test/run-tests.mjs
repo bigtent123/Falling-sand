@@ -164,6 +164,15 @@ console.log('\n-- classic physics --');
 }
 {
   const { reg, engine } = freshWorld();
+  const nitro = reg.id('nitro'), wall = reg.id('wall'), fire = reg.id('fire'), smoke = reg.id('smoke');
+  for (let x = 0; x < 60; x++) engine.set(x, 59, wall);
+  for (let y = 2; y < 6; y++) for (let x = 28; x < 32; x++) engine.set(x, y, nitro);
+  for (let t = 0; t < 200; t++) engine.update();
+  check('nitro detonates on impact', countId(engine, nitro) === 0,
+    `nitro=${countId(engine, nitro)} fire=${countId(engine, fire)} smoke=${countId(engine, smoke)}`);
+}
+{
+  const { reg, engine } = freshWorld();
   const conc = reg.id('concrete'), wall = reg.id('wall');
   for (let x = 0; x < 60; x++) engine.set(x, 59, wall);
   for (let y = 20; y < 30; y++) for (let x = 28; x < 32; x++) engine.set(x, y, conc);
