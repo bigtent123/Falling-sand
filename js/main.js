@@ -1,7 +1,7 @@
 import { Registry, CAT } from './registry.js';
 import { defineClassicElements, CLASSIC_PANEL } from './classic.js';
 import { defineLibraryElements } from './library.js';
-import { Engine } from './engine.js';
+import { Engine } from './engine.js?v=2';
 import { Entities } from './creatures.js';
 import { GUIDELINES, generateParticle } from './ai.js';
 
