@@ -163,6 +163,30 @@ pauseBtn.addEventListener('click', () => {
   pauseBtn.textContent = paused ? 'Resume' : 'Pause';
 });
 
+// --------------------------------------------------------- panel minimize
+
+const panel = document.getElementById('panel');
+const panelToggle = document.getElementById('panel-toggle');
+let panelMinimized = localStorage.getItem('fsg-panel-min') === '1';
+
+function setPanelMinimized(min) {
+  panelMinimized = min;
+  panel.classList.toggle('panel-minimized', min);
+  panelToggle.textContent = min ? '+' : '−';
+  panelToggle.title = min ? 'Expand panel' : 'Minimize panel';
+  panelToggle.setAttribute('aria-expanded', String(!min));
+  localStorage.setItem('fsg-panel-min', min ? '1' : '0');
+}
+
+panelToggle.addEventListener('click', e => {
+  e.stopPropagation();
+  setPanelMinimized(!panelMinimized);
+});
+panel.addEventListener('click', () => {
+  if (panelMinimized) setPanelMinimized(false);
+});
+setPanelMinimized(panelMinimized);
+
 // ------------------------------------------------------------ UI: AI lab
 
 const aiPrompt = document.getElementById('ai-prompt');

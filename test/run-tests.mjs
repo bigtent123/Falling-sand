@@ -100,6 +100,13 @@ console.log('\n-- classic physics --');
 }
 {
   const { reg, engine } = freshWorld();
+  const sand = reg.id('sand'), water = reg.id('water');
+  engine.set(30, 30, sand);
+  engine.paint(30, 30, 1, water);
+  check('paint overwrites existing particle', engine.cells[engine.idx(30, 30)] === water);
+}
+{
+  const { reg, engine } = freshWorld();
   const water = reg.id('water'), oil = reg.id('oil');
   for (let y = 45; y < 60; y++) for (let x = 0; x < 60; x++) engine.set(x, y, water);
   for (let y = 30; y < 34; y++) for (let x = 25; x < 35; x++) engine.set(x, y, oil);
