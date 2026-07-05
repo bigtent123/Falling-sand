@@ -598,8 +598,9 @@ export class Engine {
         const i = this.idx(x, y);
         if (this.entityMap[i]) continue;
         if (id === 0) { this.setI(i, 0); continue; }
-        // classic behaviour: draw only over empty space (except walls/static)
-        if (this.cells[i] === 0 || this.reg.elements[id].cat === CAT.STATIC) this.setI(i, id);
+        const existing = this.cells[i];
+        if (existing !== 0 && this.reg.elements[existing]?.indestructible) continue;
+        this.setI(i, id);
       }
     }
   }

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Falling Sand Game — with AI particles</title>
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=2">
 </head>
 <body>
 <main>
@@ -18,6 +18,11 @@
 
     <!-- classic control panel, bottom-right like the original -->
     <div id="panel">
+      <div id="panel-header">
+        <span id="panel-title">Controls</span>
+        <button id="panel-toggle" type="button" aria-expanded="true" title="Minimize panel">−</button>
+      </div>
+      <div id="panel-body">
       <div id="panel-left">
         <div id="streams">
           <label>Streams:</label>
@@ -47,6 +52,7 @@
         </div>
       </div>
       <div id="counters"></div>
+      </div>
     </div>
   </div>
 
@@ -100,6 +106,6 @@
     </section>
   </div>
 </main>
-<script type="module" src="js/main.js"></script>
+<script type="module" src="js/main.js?v=2"></script>
 </body>
 </html>
